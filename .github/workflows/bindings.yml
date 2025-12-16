@@ -1,0 +1,52 @@
+name: contracts
+
+on:
+  push:
+    branches: [ "**" ]
+  pull_request:
+
+jobs:
+  solc-and-abigen:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: "10"
+
+      - name: Install deps
+        run: pnpm install --frozen-lockfile
+
+      - name: Setup Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: "1.22"
+
+      - name: Install abigen
+        run: |
+          go install github.com/ethereum/go-ethereum/cmd/abigen@v1.16.7
+          echo "$(go env GOPATH)/bin" >> $GITHUB_PATH
+
+      - name: Generate ABI/BIN with solc
+        run: pnpm run gen:solc
+
+      - name: Generate Go bindings
+        run: pnpm run gen:abigen
+
+      - name: Ensure generated outputs are committed
+        run: |
+          git status --porcelain
+          if [ -n "$(git status --porcelain)" ]; then
+            echo "Generated files are out of date. Run: pnpm run gen and commit the changes."
+            git diff
+            exit 1
+          fi

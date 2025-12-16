@@ -1,0 +1,522 @@
+// Code generated - DO NOT EDIT.
+// This file is a generated binding and any manual changes will be lost.
+
+package quantumauthaccount
+
+import (
+	"errors"
+	"math/big"
+	"strings"
+
+	ethereum "github.com/ethereum/go-ethereum"
+	"github.com/ethereum/go-ethereum/accounts/abi"
+	"github.com/ethereum/go-ethereum/accounts/abi/bind"
+	"github.com/ethereum/go-ethereum/common"
+	"github.com/ethereum/go-ethereum/core/types"
+	"github.com/ethereum/go-ethereum/event"
+)
+
+// Reference imports to suppress errors if they are not otherwise used.
+var (
+	_ = errors.New
+	_ = big.NewInt
+	_ = strings.NewReader
+	_ = ethereum.NotFound
+	_ = bind.Bind
+	_ = common.Big1
+	_ = types.BloomLookup
+	_ = event.NewSubscription
+	_ = abi.ConvertType
+)
+
+// BaseAccountCall is an auto generated low-level Go binding around an user-defined struct.
+type BaseAccountCall struct {
+	Target common.Address
+	Value  *big.Int
+	Data   []byte
+}
+
+// PackedUserOperation is an auto generated low-level Go binding around an user-defined struct.
+type PackedUserOperation struct {
+	Sender             common.Address
+	Nonce              *big.Int
+	InitCode           []byte
+	CallData           []byte
+	AccountGasLimits   [32]byte
+	PreVerificationGas *big.Int
+	GasFees            [32]byte
+	PaymasterAndData   []byte
+	Signature          []byte
+}
+
+// QuantumAuthAccountMetaData contains all meta data concerning the QuantumAuthAccount contract.
+var QuantumAuthAccountMetaData = &bind.MetaData{
+	ABI: "[{\"inputs\":[{\"internalType\":\"contractIEntryPoint\",\"name\":\"entryPoint_\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"eoa1_\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"eoa2_\",\"type\":\"address\"},{\"internalType\":\"contractITPMVerifier\",\"name\":\"tpmVerifier_\",\"type\":\"address\"},{\"internalType\":\"bytes32\",\"name\":\"tpmKeyId_\",\"type\":\"bytes32\"}],\"stateMutability\":\"nonpayable\",\"type\":\"constructor\"},{\"inputs\":[],\"name\":\"ECDSAInvalidSignature\",\"type\":\"error\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"length\",\"type\":\"uint256\"}],\"name\":\"ECDSAInvalidSignatureLength\",\"type\":\"error\"},{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"s\",\"type\":\"bytes32\"}],\"name\":\"ECDSAInvalidSignatureS\",\"type\":\"error\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"index\",\"type\":\"uint256\"},{\"internalType\":\"bytes\",\"name\":\"error\",\"type\":\"bytes\"}],\"name\":\"ExecuteError\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"InvalidEOA\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"InvalidMode\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"InvalidTPMVerifier\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"NotAuthorized\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"OnlyEntryPoint\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"entryPoint\",\"outputs\":[{\"internalType\":\"contractIEntryPoint\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"eoa1\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"eoa2\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"target\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"value\",\"type\":\"uint256\"},{\"internalType\":\"bytes\",\"name\":\"data\",\"type\":\"bytes\"}],\"name\":\"execute\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"components\":[{\"internalType\":\"address\",\"name\":\"target\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"value\",\"type\":\"uint256\"},{\"internalType\":\"bytes\",\"name\":\"data\",\"type\":\"bytes\"}],\"internalType\":\"structBaseAccount.Call[]\",\"name\":\"calls\",\"type\":\"tuple[]\"}],\"name\":\"executeBatch\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"getNonce\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"tpmKeyId\",\"outputs\":[{\"internalType\":\"bytes32\",\"name\":\"\",\"type\":\"bytes32\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"tpmVerifier\",\"outputs\":[{\"internalType\":\"contractITPMVerifier\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"components\":[{\"internalType\":\"address\",\"name\":\"sender\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"nonce\",\"type\":\"uint256\"},{\"internalType\":\"bytes\",\"name\":\"initCode\",\"type\":\"bytes\"},{\"internalType\":\"bytes\",\"name\":\"callData\",\"type\":\"bytes\"},{\"internalType\":\"bytes32\",\"name\":\"accountGasLimits\",\"type\":\"bytes32\"},{\"internalType\":\"uint256\",\"name\":\"preVerificationGas\",\"type\":\"uint256\"},{\"internalType\":\"bytes32\",\"name\":\"gasFees\",\"type\":\"bytes32\"},{\"internalType\":\"bytes\",\"name\":\"paymasterAndData\",\"type\":\"bytes\"},{\"internalType\":\"bytes\",\"name\":\"signature\",\"type\":\"bytes\"}],\"internalType\":\"structPackedUserOperation\",\"name\":\"userOp\",\"type\":\"tuple\"},{\"internalType\":\"bytes32\",\"name\":\"userOpHash\",\"type\":\"bytes32\"},{\"internalType\":\"uint256\",\"name\":\"missingAccountFunds\",\"type\":\"uint256\"}],\"name\":\"validateUserOp\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"validationData\",\"type\":\"uint256\"}],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"addresspayable\",\"name\":\"\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"name\":\"withdraw\",\"outputs\":[],\"stateMutability\":\"pure\",\"type\":\"function\"},{\"stateMutability\":\"payable\",\"type\":\"receive\"}]",
+	Bin: "0x610120604052348015610010575f5ffd5b5060405161105638038061105683398101604081905261002f916100ed565b6001600160a01b038416158061004c57506001600160a01b038316155b806100685750826001600160a01b0316846001600160a01b0316145b15610086576040516303602a5960e51b815260040160405180910390fd5b6001600160a01b0382166100ad57604051633c4ac85360e21b815260040160405180910390fd5b6001600160a01b0394851660805292841660a05290831660c05290911660e05261010052610154565b6001600160a01b03811681146100ea575f5ffd5b50565b5f5f5f5f5f60a08688031215610101575f5ffd5b855161010c816100d6565b602087015190955061011d816100d6565b604087015190945061012e816100d6565b606087015190935061013f816100d6565b80925050608086015190509295509295909350565b60805160a05160c05160e05161010051610e956101c15f395f818160e0015261067601525f8181610199015261064901525f81816101e001526105e701525f818161021301526105b901525f8181610131015281816103740152818161042b01526104e10152610e955ff3fe608060405260043610610092575f3560e01c8063bf56d31c11610057578063bf56d31c14610188578063d087d288146101bb578063df4c2afa146101cf578063f2cf3c6614610202578063f3fef3a314610235575f5ffd5b806319822f7c1461009d578063337e1885146100cf57806334fcd5be14610102578063b0d691fe14610123578063b61d27f614610169575f5ffd5b3661009957005b5f5ffd5b3480156100a8575f5ffd5b506100bc6100b7366004610a32565b610254565b6040519081526020015b60405180910390f35b3480156100da575f5ffd5b506100bc7f000000000000000000000000000000000000000000000000000000000000000081565b34801561010d575f5ffd5b5061012161011c366004610a81565b610279565b005b34801561012e575f5ffd5b507f00000000000000000000000000000000000000000000000000000000000000005b6040516001600160a01b0390911681526020016100c6565b348015610174575f5ffd5b50610121610183366004610b06565b610369565b348015610193575f5ffd5b506101517f000000000000000000000000000000000000000000000000000000000000000081565b3480156101c6575f5ffd5b506100bc610428565b3480156101da575f5ffd5b506101517f000000000000000000000000000000000000000000000000000000000000000081565b34801561020d575f5ffd5b506101517f000000000000000000000000000000000000000000000000000000000000000081565b348015610240575f5ffd5b5061012161024f366004610b8b565b6104bd565b5f61025d6104d6565b6102678484610550565b90506102728261074e565b9392505050565b61028161079f565b805f5b81811015610363573684848381811061029f5761029f610bb5565b90506020028101906102b19190610bc9565b90505f61030f6102c46020840184610be7565b60208401356102d66040860186610c02565b8080601f0160208091040260200160405190810160405280939291908181526020018383808284375f920191909152505050505a6107a7565b905080610359578360010361032b576103266107bd565b610359565b826103355f6107ce565b604051635a15467560e01b8152600401610350929190610c7a565b60405180910390fd5b5050600101610284565b50505050565b336001600160a01b037f000000000000000000000000000000000000000000000000000000000000000016146103b25760405163bd07c55160e01b815260040160405180910390fd5b5f5f856001600160a01b03168585856040516103cf929190610c9a565b5f6040518083038185875af1925050503d805f8114610409576040519150601f19603f3d011682016040523d82523d5f602084013e61040e565b606091505b50915091508161042057805160208201fd5b505050505050565b5f7f0000000000000000000000000000000000000000000000000000000000000000604051631aab3f0d60e11b81523060048201525f60248201526001600160a01b0391909116906335567e1a90604401602060405180830381865afa158015610494573d5f5f3e3d5ffd5b505050506040513d601f19601f820116820180604052508101906104b89190610ca9565b905090565b60405163ea8e4eb560e01b815260040160405180910390fd5b336001600160a01b037f0000000000000000000000000000000000000000000000000000000000000000161461054e5760405162461bcd60e51b815260206004820152601c60248201527f6163636f756e743a206e6f742066726f6d20456e747279506f696e74000000006044820152606401610350565b565b5f80808080610563610100880188610c02565b8101906105709190610d5f565b93509350935093505f6105af877f19457468657265756d205369676e6564204d6573736167653a0a3332000000005f908152601c91909152603c902090565b90505f6105dd82867f00000000000000000000000000000000000000000000000000000000000000006107ff565b90505f61060b83867f00000000000000000000000000000000000000000000000000000000000000006107ff565b905060ff871661070457818061061e5750805b610632576001975050505050505050610745565b6040516303784b1960e61b81526001600160a01b037f0000000000000000000000000000000000000000000000000000000000000000169063de12c640906106a2907f0000000000000000000000000000000000000000000000000000000000000000908d908990600401610e05565b602060405180830381865afa1580156106bd573d5f5f3e3d5ffd5b505050506040513d601f19601f820116820180604052508101906106e19190610e2c565b6106f5576001975050505050505050610745565b5f975050505050505050610745565b5f1960ff88160161072c578180156106e15750806106f5576001975050505050505050610745565b60405163a0042b1760e01b815260040160405180910390fd5b92915050565b50565b801561074b576040515f90339083908381818185875af1925050503d805f8114610793576040519150601f19603f3d011682016040523d82523d5f602084013e610798565b606091505b5050505050565b61054e6104d6565b5f5f5f845160208601878987f195945050505050565b61054e6107c95f6107ce565b610835565b60603d82156107e257828111156107e25750815b604051602082018101604052818152815f602083013e9392505050565b5f82515f0361080f57505f610272565b6001600160a01b038216610823858561083d565b6001600160a01b031614949350505050565b805160208201fd5b5f5f5f5f61084b8686610865565b92509250925061085b82826108ae565b5090949350505050565b5f5f5f835160410361089c576020840151604085015160608601515f1a61088e8882858561096a565b9550955095505050506108a7565b505081515f91506002905b9250925092565b5f8260038111156108c1576108c1610e4b565b036108ca575050565b60018260038111156108de576108de610e4b565b036108fc5760405163f645eedf60e01b815260040160405180910390fd5b600282600381111561091057610910610e4b565b036109315760405163fce698f760e01b815260048101829052602401610350565b600382600381111561094557610945610e4b565b03610966576040516335e2f38360e21b815260048101829052602401610350565b5050565b5f80807f7fffffffffffffffffffffffffffffff5d576e7357a4501ddfe92f46681b20a08411156109a357505f91506003905082610a28565b604080515f808252602082018084528a905260ff891692820192909252606081018790526080810186905260019060a0016020604051602081039080840390855afa1580156109f4573d5f5f3e3d5ffd5b5050604051601f1901519150506001600160a01b038116610a1f57505f925060019150829050610a28565b92505f91508190505b9450945094915050565b5f5f5f60608486031215610a44575f5ffd5b833567ffffffffffffffff811115610a5a575f5ffd5b84016101208187031215610a6c575f5ffd5b95602085013595506040909401359392505050565b5f5f60208385031215610a92575f5ffd5b823567ffffffffffffffff811115610aa8575f5ffd5b8301601f81018513610ab8575f5ffd5b803567ffffffffffffffff811115610ace575f5ffd5b8560208260051b8401011115610ae2575f5ffd5b6020919091019590945092505050565b6001600160a01b038116811461074b575f5ffd5b5f5f5f5f60608587031215610b19575f5ffd5b8435610b2481610af2565b935060208501359250604085013567ffffffffffffffff811115610b46575f5ffd5b8501601f81018713610b56575f5ffd5b803567ffffffffffffffff811115610b6c575f5ffd5b876020828401011115610b7d575f5ffd5b949793965060200194505050565b5f5f60408385031215610b9c575f5ffd5b8235610ba781610af2565b946020939093013593505050565b634e487b7160e01b5f52603260045260245ffd5b5f8235605e19833603018112610bdd575f5ffd5b9190910192915050565b5f60208284031215610bf7575f5ffd5b813561027281610af2565b5f5f8335601e19843603018112610c17575f5ffd5b83018035915067ffffffffffffffff821115610c31575f5ffd5b602001915036819003821315610c45575f5ffd5b9250929050565b5f81518084528060208401602086015e5f602082860101526020601f19601f83011685010191505092915050565b828152604060208201525f610c926040830184610c4c565b949350505050565b818382375f9101908152919050565b5f60208284031215610cb9575f5ffd5b5051919050565b634e487b7160e01b5f52604160045260245ffd5b5f82601f830112610ce3575f5ffd5b813567ffffffffffffffff811115610cfd57610cfd610cc0565b604051601f8201601f19908116603f0116810167ffffffffffffffff81118282101715610d2c57610d2c610cc0565b604052818152838201602001851015610d43575f5ffd5b816020850160208301375f918101602001919091529392505050565b5f5f5f5f60808587031215610d72575f5ffd5b843560ff81168114610d82575f5ffd5b9350602085013567ffffffffffffffff811115610d9d575f5ffd5b610da987828801610cd4565b935050604085013567ffffffffffffffff811115610dc5575f5ffd5b610dd187828801610cd4565b925050606085013567ffffffffffffffff811115610ded575f5ffd5b610df987828801610cd4565b91505092959194509250565b838152826020820152606060408201525f610e236060830184610c4c565b95945050505050565b5f60208284031215610e3c575f5ffd5b81518015158114610272575f5ffd5b634e487b7160e01b5f52602160045260245ffdfea26469706673582212201b4096682f18e742168be398bbe47e6d765b7f1cdd97a1d9348e253bc92dd9a564736f6c634300081c0033",
+}
+
+// QuantumAuthAccountABI is the input ABI used to generate the binding from.
+// Deprecated: Use QuantumAuthAccountMetaData.ABI instead.
+var QuantumAuthAccountABI = QuantumAuthAccountMetaData.ABI
+
+// QuantumAuthAccountBin is the compiled bytecode used for deploying new contracts.
+// Deprecated: Use QuantumAuthAccountMetaData.Bin instead.
+var QuantumAuthAccountBin = QuantumAuthAccountMetaData.Bin
+
+// DeployQuantumAuthAccount deploys a new Ethereum contract, binding an instance of QuantumAuthAccount to it.
+func DeployQuantumAuthAccount(auth *bind.TransactOpts, backend bind.ContractBackend, entryPoint_ common.Address, eoa1_ common.Address, eoa2_ common.Address, tpmVerifier_ common.Address, tpmKeyId_ [32]byte) (common.Address, *types.Transaction, *QuantumAuthAccount, error) {
+	parsed, err := QuantumAuthAccountMetaData.GetAbi()
+	if err != nil {
+		return common.Address{}, nil, nil, err
+	}
+	if parsed == nil {
+		return common.Address{}, nil, nil, errors.New("GetABI returned nil")
+	}
+
+	address, tx, contract, err := bind.DeployContract(auth, *parsed, common.FromHex(QuantumAuthAccountBin), backend, entryPoint_, eoa1_, eoa2_, tpmVerifier_, tpmKeyId_)
+	if err != nil {
+		return common.Address{}, nil, nil, err
+	}
+	return address, tx, &QuantumAuthAccount{QuantumAuthAccountCaller: QuantumAuthAccountCaller{contract: contract}, QuantumAuthAccountTransactor: QuantumAuthAccountTransactor{contract: contract}, QuantumAuthAccountFilterer: QuantumAuthAccountFilterer{contract: contract}}, nil
+}
+
+// QuantumAuthAccount is an auto generated Go binding around an Ethereum contract.
+type QuantumAuthAccount struct {
+	QuantumAuthAccountCaller     // Read-only binding to the contract
+	QuantumAuthAccountTransactor // Write-only binding to the contract
+	QuantumAuthAccountFilterer   // Log filterer for contract events
+}
+
+// QuantumAuthAccountCaller is an auto generated read-only Go binding around an Ethereum contract.
+type QuantumAuthAccountCaller struct {
+	contract *bind.BoundContract // Generic contract wrapper for the low level calls
+}
+
+// QuantumAuthAccountTransactor is an auto generated write-only Go binding around an Ethereum contract.
+type QuantumAuthAccountTransactor struct {
+	contract *bind.BoundContract // Generic contract wrapper for the low level calls
+}
+
+// QuantumAuthAccountFilterer is an auto generated log filtering Go binding around an Ethereum contract events.
+type QuantumAuthAccountFilterer struct {
+	contract *bind.BoundContract // Generic contract wrapper for the low level calls
+}
+
+// QuantumAuthAccountSession is an auto generated Go binding around an Ethereum contract,
+// with pre-set call and transact options.
+type QuantumAuthAccountSession struct {
+	Contract     *QuantumAuthAccount // Generic contract binding to set the session for
+	CallOpts     bind.CallOpts       // Call options to use throughout this session
+	TransactOpts bind.TransactOpts   // Transaction auth options to use throughout this session
+}
+
+// QuantumAuthAccountCallerSession is an auto generated read-only Go binding around an Ethereum contract,
+// with pre-set call options.
+type QuantumAuthAccountCallerSession struct {
+	Contract *QuantumAuthAccountCaller // Generic contract caller binding to set the session for
+	CallOpts bind.CallOpts             // Call options to use throughout this session
+}
+
+// QuantumAuthAccountTransactorSession is an auto generated write-only Go binding around an Ethereum contract,
+// with pre-set transact options.
+type QuantumAuthAccountTransactorSession struct {
+	Contract     *QuantumAuthAccountTransactor // Generic contract transactor binding to set the session for
+	TransactOpts bind.TransactOpts             // Transaction auth options to use throughout this session
+}
+
+// QuantumAuthAccountRaw is an auto generated low-level Go binding around an Ethereum contract.
+type QuantumAuthAccountRaw struct {
+	Contract *QuantumAuthAccount // Generic contract binding to access the raw methods on
+}
+
+// QuantumAuthAccountCallerRaw is an auto generated low-level read-only Go binding around an Ethereum contract.
+type QuantumAuthAccountCallerRaw struct {
+	Contract *QuantumAuthAccountCaller // Generic read-only contract binding to access the raw methods on
+}
+
+// QuantumAuthAccountTransactorRaw is an auto generated low-level write-only Go binding around an Ethereum contract.
+type QuantumAuthAccountTransactorRaw struct {
+	Contract *QuantumAuthAccountTransactor // Generic write-only contract binding to access the raw methods on
+}
+
+// NewQuantumAuthAccount creates a new instance of QuantumAuthAccount, bound to a specific deployed contract.
+func NewQuantumAuthAccount(address common.Address, backend bind.ContractBackend) (*QuantumAuthAccount, error) {
+	contract, err := bindQuantumAuthAccount(address, backend, backend, backend)
+	if err != nil {
+		return nil, err
+	}
+	return &QuantumAuthAccount{QuantumAuthAccountCaller: QuantumAuthAccountCaller{contract: contract}, QuantumAuthAccountTransactor: QuantumAuthAccountTransactor{contract: contract}, QuantumAuthAccountFilterer: QuantumAuthAccountFilterer{contract: contract}}, nil
+}
+
+// NewQuantumAuthAccountCaller creates a new read-only instance of QuantumAuthAccount, bound to a specific deployed contract.
+func NewQuantumAuthAccountCaller(address common.Address, caller bind.ContractCaller) (*QuantumAuthAccountCaller, error) {
+	contract, err := bindQuantumAuthAccount(address, caller, nil, nil)
+	if err != nil {
+		return nil, err
+	}
+	return &QuantumAuthAccountCaller{contract: contract}, nil
+}
+
+// NewQuantumAuthAccountTransactor creates a new write-only instance of QuantumAuthAccount, bound to a specific deployed contract.
+func NewQuantumAuthAccountTransactor(address common.Address, transactor bind.ContractTransactor) (*QuantumAuthAccountTransactor, error) {
+	contract, err := bindQuantumAuthAccount(address, nil, transactor, nil)
+	if err != nil {
+		return nil, err
+	}
+	return &QuantumAuthAccountTransactor{contract: contract}, nil
+}
+
+// NewQuantumAuthAccountFilterer creates a new log filterer instance of QuantumAuthAccount, bound to a specific deployed contract.
+func NewQuantumAuthAccountFilterer(address common.Address, filterer bind.ContractFilterer) (*QuantumAuthAccountFilterer, error) {
+	contract, err := bindQuantumAuthAccount(address, nil, nil, filterer)
+	if err != nil {
+		return nil, err
+	}
+	return &QuantumAuthAccountFilterer{contract: contract}, nil
+}
+
+// bindQuantumAuthAccount binds a generic wrapper to an already deployed contract.
+func bindQuantumAuthAccount(address common.Address, caller bind.ContractCaller, transactor bind.ContractTransactor, filterer bind.ContractFilterer) (*bind.BoundContract, error) {
+	parsed, err := QuantumAuthAccountMetaData.GetAbi()
+	if err != nil {
+		return nil, err
+	}
+	return bind.NewBoundContract(address, *parsed, caller, transactor, filterer), nil
+}
+
+// Call invokes the (constant) contract method with params as input values and
+// sets the output to result. The result type might be a single field for simple
+// returns, a slice of interfaces for anonymous returns and a struct for named
+// returns.
+func (_QuantumAuthAccount *QuantumAuthAccountRaw) Call(opts *bind.CallOpts, result *[]interface{}, method string, params ...interface{}) error {
+	return _QuantumAuthAccount.Contract.QuantumAuthAccountCaller.contract.Call(opts, result, method, params...)
+}
+
+// Transfer initiates a plain transaction to move funds to the contract, calling
+// its default method if one is available.
+func (_QuantumAuthAccount *QuantumAuthAccountRaw) Transfer(opts *bind.TransactOpts) (*types.Transaction, error) {
+	return _QuantumAuthAccount.Contract.QuantumAuthAccountTransactor.contract.Transfer(opts)
+}
+
+// Transact invokes the (paid) contract method with params as input values.
+func (_QuantumAuthAccount *QuantumAuthAccountRaw) Transact(opts *bind.TransactOpts, method string, params ...interface{}) (*types.Transaction, error) {
+	return _QuantumAuthAccount.Contract.QuantumAuthAccountTransactor.contract.Transact(opts, method, params...)
+}
+
+// Call invokes the (constant) contract method with params as input values and
+// sets the output to result. The result type might be a single field for simple
+// returns, a slice of interfaces for anonymous returns and a struct for named
+// returns.
+func (_QuantumAuthAccount *QuantumAuthAccountCallerRaw) Call(opts *bind.CallOpts, result *[]interface{}, method string, params ...interface{}) error {
+	return _QuantumAuthAccount.Contract.contract.Call(opts, result, method, params...)
+}
+
+// Transfer initiates a plain transaction to move funds to the contract, calling
+// its default method if one is available.
+func (_QuantumAuthAccount *QuantumAuthAccountTransactorRaw) Transfer(opts *bind.TransactOpts) (*types.Transaction, error) {
+	return _QuantumAuthAccount.Contract.contract.Transfer(opts)
+}
+
+// Transact invokes the (paid) contract method with params as input values.
+func (_QuantumAuthAccount *QuantumAuthAccountTransactorRaw) Transact(opts *bind.TransactOpts, method string, params ...interface{}) (*types.Transaction, error) {
+	return _QuantumAuthAccount.Contract.contract.Transact(opts, method, params...)
+}
+
+// EntryPoint is a free data retrieval call binding the contract method 0xb0d691fe.
+//
+// Solidity: function entryPoint() view returns(address)
+func (_QuantumAuthAccount *QuantumAuthAccountCaller) EntryPoint(opts *bind.CallOpts) (common.Address, error) {
+	var out []interface{}
+	err := _QuantumAuthAccount.contract.Call(opts, &out, "entryPoint")
+
+	if err != nil {
+		return *new(common.Address), err
+	}
+
+	out0 := *abi.ConvertType(out[0], new(common.Address)).(*common.Address)
+
+	return out0, err
+
+}
+
+// EntryPoint is a free data retrieval call binding the contract method 0xb0d691fe.
+//
+// Solidity: function entryPoint() view returns(address)
+func (_QuantumAuthAccount *QuantumAuthAccountSession) EntryPoint() (common.Address, error) {
+	return _QuantumAuthAccount.Contract.EntryPoint(&_QuantumAuthAccount.CallOpts)
+}
+
+// EntryPoint is a free data retrieval call binding the contract method 0xb0d691fe.
+//
+// Solidity: function entryPoint() view returns(address)
+func (_QuantumAuthAccount *QuantumAuthAccountCallerSession) EntryPoint() (common.Address, error) {
+	return _QuantumAuthAccount.Contract.EntryPoint(&_QuantumAuthAccount.CallOpts)
+}
+
+// Eoa1 is a free data retrieval call binding the contract method 0xf2cf3c66.
+//
+// Solidity: function eoa1() view returns(address)
+func (_QuantumAuthAccount *QuantumAuthAccountCaller) Eoa1(opts *bind.CallOpts) (common.Address, error) {
+	var out []interface{}
+	err := _QuantumAuthAccount.contract.Call(opts, &out, "eoa1")
+
+	if err != nil {
+		return *new(common.Address), err
+	}
+
+	out0 := *abi.ConvertType(out[0], new(common.Address)).(*common.Address)
+
+	return out0, err
+
+}
+
+// Eoa1 is a free data retrieval call binding the contract method 0xf2cf3c66.
+//
+// Solidity: function eoa1() view returns(address)
+func (_QuantumAuthAccount *QuantumAuthAccountSession) Eoa1() (common.Address, error) {
+	return _QuantumAuthAccount.Contract.Eoa1(&_QuantumAuthAccount.CallOpts)
+}
+
+// Eoa1 is a free data retrieval call binding the contract method 0xf2cf3c66.
+//
+// Solidity: function eoa1() view returns(address)
+func (_QuantumAuthAccount *QuantumAuthAccountCallerSession) Eoa1() (common.Address, error) {
+	return _QuantumAuthAccount.Contract.Eoa1(&_QuantumAuthAccount.CallOpts)
+}
+
+// Eoa2 is a free data retrieval call binding the contract method 0xdf4c2afa.
+//
+// Solidity: function eoa2() view returns(address)
+func (_QuantumAuthAccount *QuantumAuthAccountCaller) Eoa2(opts *bind.CallOpts) (common.Address, error) {
+	var out []interface{}
+	err := _QuantumAuthAccount.contract.Call(opts, &out, "eoa2")
+
+	if err != nil {
+		return *new(common.Address), err
+	}
+
+	out0 := *abi.ConvertType(out[0], new(common.Address)).(*common.Address)
+
+	return out0, err
+
+}
+
+// Eoa2 is a free data retrieval call binding the contract method 0xdf4c2afa.
+//
+// Solidity: function eoa2() view returns(address)
+func (_QuantumAuthAccount *QuantumAuthAccountSession) Eoa2() (common.Address, error) {
+	return _QuantumAuthAccount.Contract.Eoa2(&_QuantumAuthAccount.CallOpts)
+}
+
+// Eoa2 is a free data retrieval call binding the contract method 0xdf4c2afa.
+//
+// Solidity: function eoa2() view returns(address)
+func (_QuantumAuthAccount *QuantumAuthAccountCallerSession) Eoa2() (common.Address, error) {
+	return _QuantumAuthAccount.Contract.Eoa2(&_QuantumAuthAccount.CallOpts)
+}
+
+// GetNonce is a free data retrieval call binding the contract method 0xd087d288.
+//
+// Solidity: function getNonce() view returns(uint256)
+func (_QuantumAuthAccount *QuantumAuthAccountCaller) GetNonce(opts *bind.CallOpts) (*big.Int, error) {
+	var out []interface{}
+	err := _QuantumAuthAccount.contract.Call(opts, &out, "getNonce")
+
+	if err != nil {
+		return *new(*big.Int), err
+	}
+
+	out0 := *abi.ConvertType(out[0], new(*big.Int)).(**big.Int)
+
+	return out0, err
+
+}
+
+// GetNonce is a free data retrieval call binding the contract method 0xd087d288.
+//
+// Solidity: function getNonce() view returns(uint256)
+func (_QuantumAuthAccount *QuantumAuthAccountSession) GetNonce() (*big.Int, error) {
+	return _QuantumAuthAccount.Contract.GetNonce(&_QuantumAuthAccount.CallOpts)
+}
+
+// GetNonce is a free data retrieval call binding the contract method 0xd087d288.
+//
+// Solidity: function getNonce() view returns(uint256)
+func (_QuantumAuthAccount *QuantumAuthAccountCallerSession) GetNonce() (*big.Int, error) {
+	return _QuantumAuthAccount.Contract.GetNonce(&_QuantumAuthAccount.CallOpts)
+}
+
+// TpmKeyId is a free data retrieval call binding the contract method 0x337e1885.
+//
+// Solidity: function tpmKeyId() view returns(bytes32)
+func (_QuantumAuthAccount *QuantumAuthAccountCaller) TpmKeyId(opts *bind.CallOpts) ([32]byte, error) {
+	var out []interface{}
+	err := _QuantumAuthAccount.contract.Call(opts, &out, "tpmKeyId")
+
+	if err != nil {
+		return *new([32]byte), err
+	}
+
+	out0 := *abi.ConvertType(out[0], new([32]byte)).(*[32]byte)
+
+	return out0, err
+
+}
+
+// TpmKeyId is a free data retrieval call binding the contract method 0x337e1885.
+//
+// Solidity: function tpmKeyId() view returns(bytes32)
+func (_QuantumAuthAccount *QuantumAuthAccountSession) TpmKeyId() ([32]byte, error) {
+	return _QuantumAuthAccount.Contract.TpmKeyId(&_QuantumAuthAccount.CallOpts)
+}
+
+// TpmKeyId is a free data retrieval call binding the contract method 0x337e1885.
+//
+// Solidity: function tpmKeyId() view returns(bytes32)
+func (_QuantumAuthAccount *QuantumAuthAccountCallerSession) TpmKeyId() ([32]byte, error) {
+	return _QuantumAuthAccount.Contract.TpmKeyId(&_QuantumAuthAccount.CallOpts)
+}
+
+// TpmVerifier is a free data retrieval call binding the contract method 0xbf56d31c.
+//
+// Solidity: function tpmVerifier() view returns(address)
+func (_QuantumAuthAccount *QuantumAuthAccountCaller) TpmVerifier(opts *bind.CallOpts) (common.Address, error) {
+	var out []interface{}
+	err := _QuantumAuthAccount.contract.Call(opts, &out, "tpmVerifier")
+
+	if err != nil {
+		return *new(common.Address), err
+	}
+
+	out0 := *abi.ConvertType(out[0], new(common.Address)).(*common.Address)
+
+	return out0, err
+
+}
+
+// TpmVerifier is a free data retrieval call binding the contract method 0xbf56d31c.
+//
+// Solidity: function tpmVerifier() view returns(address)
+func (_QuantumAuthAccount *QuantumAuthAccountSession) TpmVerifier() (common.Address, error) {
+	return _QuantumAuthAccount.Contract.TpmVerifier(&_QuantumAuthAccount.CallOpts)
+}
+
+// TpmVerifier is a free data retrieval call binding the contract method 0xbf56d31c.
+//
+// Solidity: function tpmVerifier() view returns(address)
+func (_QuantumAuthAccount *QuantumAuthAccountCallerSession) TpmVerifier() (common.Address, error) {
+	return _QuantumAuthAccount.Contract.TpmVerifier(&_QuantumAuthAccount.CallOpts)
+}
+
+// Withdraw is a free data retrieval call binding the contract method 0xf3fef3a3.
+//
+// Solidity: function withdraw(address , uint256 ) pure returns()
+func (_QuantumAuthAccount *QuantumAuthAccountCaller) Withdraw(opts *bind.CallOpts, arg0 common.Address, arg1 *big.Int) error {
+	var out []interface{}
+	err := _QuantumAuthAccount.contract.Call(opts, &out, "withdraw", arg0, arg1)
+
+	if err != nil {
+		return err
+	}
+
+	return err
+
+}
+
+// Withdraw is a free data retrieval call binding the contract method 0xf3fef3a3.
+//
+// Solidity: function withdraw(address , uint256 ) pure returns()
+func (_QuantumAuthAccount *QuantumAuthAccountSession) Withdraw(arg0 common.Address, arg1 *big.Int) error {
+	return _QuantumAuthAccount.Contract.Withdraw(&_QuantumAuthAccount.CallOpts, arg0, arg1)
+}
+
+// Withdraw is a free data retrieval call binding the contract method 0xf3fef3a3.
+//
+// Solidity: function withdraw(address , uint256 ) pure returns()
+func (_QuantumAuthAccount *QuantumAuthAccountCallerSession) Withdraw(arg0 common.Address, arg1 *big.Int) error {
+	return _QuantumAuthAccount.Contract.Withdraw(&_QuantumAuthAccount.CallOpts, arg0, arg1)
+}
+
+// Execute is a paid mutator transaction binding the contract method 0xb61d27f6.
+//
+// Solidity: function execute(address target, uint256 value, bytes data) returns()
+func (_QuantumAuthAccount *QuantumAuthAccountTransactor) Execute(opts *bind.TransactOpts, target common.Address, value *big.Int, data []byte) (*types.Transaction, error) {
+	return _QuantumAuthAccount.contract.Transact(opts, "execute", target, value, data)
+}
+
+// Execute is a paid mutator transaction binding the contract method 0xb61d27f6.
+//
+// Solidity: function execute(address target, uint256 value, bytes data) returns()
+func (_QuantumAuthAccount *QuantumAuthAccountSession) Execute(target common.Address, value *big.Int, data []byte) (*types.Transaction, error) {
+	return _QuantumAuthAccount.Contract.Execute(&_QuantumAuthAccount.TransactOpts, target, value, data)
+}
+
+// Execute is a paid mutator transaction binding the contract method 0xb61d27f6.
+//
+// Solidity: function execute(address target, uint256 value, bytes data) returns()
+func (_QuantumAuthAccount *QuantumAuthAccountTransactorSession) Execute(target common.Address, value *big.Int, data []byte) (*types.Transaction, error) {
+	return _QuantumAuthAccount.Contract.Execute(&_QuantumAuthAccount.TransactOpts, target, value, data)
+}
+
+// ExecuteBatch is a paid mutator transaction binding the contract method 0x34fcd5be.
+//
+// Solidity: function executeBatch((address,uint256,bytes)[] calls) returns()
+func (_QuantumAuthAccount *QuantumAuthAccountTransactor) ExecuteBatch(opts *bind.TransactOpts, calls []BaseAccountCall) (*types.Transaction, error) {
+	return _QuantumAuthAccount.contract.Transact(opts, "executeBatch", calls)
+}
+
+// ExecuteBatch is a paid mutator transaction binding the contract method 0x34fcd5be.
+//
+// Solidity: function executeBatch((address,uint256,bytes)[] calls) returns()
+func (_QuantumAuthAccount *QuantumAuthAccountSession) ExecuteBatch(calls []BaseAccountCall) (*types.Transaction, error) {
+	return _QuantumAuthAccount.Contract.ExecuteBatch(&_QuantumAuthAccount.TransactOpts, calls)
+}
+
+// ExecuteBatch is a paid mutator transaction binding the contract method 0x34fcd5be.
+//
+// Solidity: function executeBatch((address,uint256,bytes)[] calls) returns()
+func (_QuantumAuthAccount *QuantumAuthAccountTransactorSession) ExecuteBatch(calls []BaseAccountCall) (*types.Transaction, error) {
+	return _QuantumAuthAccount.Contract.ExecuteBatch(&_QuantumAuthAccount.TransactOpts, calls)
+}
+
+// ValidateUserOp is a paid mutator transaction binding the contract method 0x19822f7c.
+//
+// Solidity: function validateUserOp((address,uint256,bytes,bytes,bytes32,uint256,bytes32,bytes,bytes) userOp, bytes32 userOpHash, uint256 missingAccountFunds) returns(uint256 validationData)
+func (_QuantumAuthAccount *QuantumAuthAccountTransactor) ValidateUserOp(opts *bind.TransactOpts, userOp PackedUserOperation, userOpHash [32]byte, missingAccountFunds *big.Int) (*types.Transaction, error) {
+	return _QuantumAuthAccount.contract.Transact(opts, "validateUserOp", userOp, userOpHash, missingAccountFunds)
+}
+
+// ValidateUserOp is a paid mutator transaction binding the contract method 0x19822f7c.
+//
+// Solidity: function validateUserOp((address,uint256,bytes,bytes,bytes32,uint256,bytes32,bytes,bytes) userOp, bytes32 userOpHash, uint256 missingAccountFunds) returns(uint256 validationData)
+func (_QuantumAuthAccount *QuantumAuthAccountSession) ValidateUserOp(userOp PackedUserOperation, userOpHash [32]byte, missingAccountFunds *big.Int) (*types.Transaction, error) {
+	return _QuantumAuthAccount.Contract.ValidateUserOp(&_QuantumAuthAccount.TransactOpts, userOp, userOpHash, missingAccountFunds)
+}
+
+// ValidateUserOp is a paid mutator transaction binding the contract method 0x19822f7c.
+//
+// Solidity: function validateUserOp((address,uint256,bytes,bytes,bytes32,uint256,bytes32,bytes,bytes) userOp, bytes32 userOpHash, uint256 missingAccountFunds) returns(uint256 validationData)
+func (_QuantumAuthAccount *QuantumAuthAccountTransactorSession) ValidateUserOp(userOp PackedUserOperation, userOpHash [32]byte, missingAccountFunds *big.Int) (*types.Transaction, error) {
+	return _QuantumAuthAccount.Contract.ValidateUserOp(&_QuantumAuthAccount.TransactOpts, userOp, userOpHash, missingAccountFunds)
+}
+
+// Receive is a paid mutator transaction binding the contract receive function.
+//
+// Solidity: receive() payable returns()
+func (_QuantumAuthAccount *QuantumAuthAccountTransactor) Receive(opts *bind.TransactOpts) (*types.Transaction, error) {
+	return _QuantumAuthAccount.contract.RawTransact(opts, nil) // calldata is disallowed for receive function
+}
+
+// Receive is a paid mutator transaction binding the contract receive function.
+//
+// Solidity: receive() payable returns()
+func (_QuantumAuthAccount *QuantumAuthAccountSession) Receive() (*types.Transaction, error) {
+	return _QuantumAuthAccount.Contract.Receive(&_QuantumAuthAccount.TransactOpts)
+}
+
+// Receive is a paid mutator transaction binding the contract receive function.
+//
+// Solidity: receive() payable returns()
+func (_QuantumAuthAccount *QuantumAuthAccountTransactorSession) Receive() (*types.Transaction, error) {
+	return _QuantumAuthAccount.Contract.Receive(&_QuantumAuthAccount.TransactOpts)
+}
