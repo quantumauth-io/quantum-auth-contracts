@@ -1,5 +1,6 @@
 import { expect } from "chai";
 import hre from "hardhat";
+import { HDNodeWallet } from "ethers";
 
 const { ethers } = await hre.network.connect();
 
@@ -24,23 +25,49 @@ function emptyUserOp(sender: string, signature: string) {
     };
 }
 
+// keyId encodes expected signer address in low 20 bytes (bytes32(uint160(addr)))
+function keyIdFromAddress(addr: string): string {
+    return ethers.zeroPadValue(addr, 32);
+}
+
+// Hardhat default mnemonic (works unless you changed config)
+const DEFAULT_MNEMONIC = "test test test test test test test test test test test junk";
+
+function walletForIndex(index: number) {
+    return HDNodeWallet.fromPhrase(DEFAULT_MNEMONIC, undefined, `m/44'/60'/0'/0/${index}`);
+}
+
+function signDigestWithWallet(wallet: HDNodeWallet, digest32: string): string {
+    const sig = wallet.signingKey.sign(digest32);
+    return ethers.Signature.from(sig).serialized;
+}
+
 describe("QuantumAuthAccount - 2-of-3 policy", function () {
     it("MODE_NORMAL: passes with EOA1 + TPM", async function () {
         const [eoa1, eoa2] = await ethers.getSigners();
 
-        const MockTPMVerifier = await ethers.getContractFactory("MockTPMVerifier");
-        const verifier = await MockTPMVerifier.deploy();
+        const Verifier = await ethers.getContractFactory("TPMVerifierSecp256k1");
+        const verifier = await Verifier.deploy();
 
         const userOpHash = ethers.keccak256(ethers.toUtf8Bytes("op:normal:eoa1"));
-        const tpmKeyId = ethers.keccak256(ethers.toUtf8Bytes("tpm:key:1"));
 
+        // TPM sig: raw digest signature by same key as eoa1 (index 0)
+        const tpmKeyId = keyIdFromAddress(eoa1.address);
+        const tpmSig = signDigestWithWallet(walletForIndex(0), userOpHash);
+
+        // EOA sig: prefixed (as your account expects)
         const eoa1Sig = await eoa1.signMessage(ethers.getBytes(userOpHash));
-        const tpmSig = "0x123456";
-        await verifier.setExpected(tpmKeyId, userOpHash, tpmSig);
 
         const Harness = await ethers.getContractFactory("QuantumAuthAccountHarness");
         const dummyEntryPoint = "0x0000000000000000000000000000000000000001";
-        const account = await Harness.deploy(dummyEntryPoint, eoa1.address, eoa2.address, await verifier.getAddress(), tpmKeyId);
+
+        const account = await Harness.deploy(
+            dummyEntryPoint,
+            eoa1.address,
+            eoa2.address,
+            await verifier.getAddress(),
+            tpmKeyId
+        );
 
         const abi = ethers.AbiCoder.defaultAbiCoder();
         const bundle = abi.encode(["uint8", "bytes", "bytes", "bytes"], [MODE_NORMAL, eoa1Sig, "0x", tpmSig]);
@@ -53,19 +80,27 @@ describe("QuantumAuthAccount - 2-of-3 policy", function () {
     it("MODE_NORMAL: passes with EOA2 + TPM", async function () {
         const [eoa1, eoa2] = await ethers.getSigners();
 
-        const MockTPMVerifier = await ethers.getContractFactory("MockTPMVerifier");
-        const verifier = await MockTPMVerifier.deploy();
+        const Verifier = await ethers.getContractFactory("TPMVerifierSecp256k1");
+        const verifier = await Verifier.deploy();
 
         const userOpHash = ethers.keccak256(ethers.toUtf8Bytes("op:normal:eoa2"));
-        const tpmKeyId = ethers.keccak256(ethers.toUtf8Bytes("tpm:key:1"));
+
+        // TPM sig: raw digest signature by same key as eoa2 (index 1)
+        const tpmKeyId = keyIdFromAddress(eoa2.address);
+        const tpmSig = signDigestWithWallet(walletForIndex(1), userOpHash);
 
         const eoa2Sig = await eoa2.signMessage(ethers.getBytes(userOpHash));
-        const tpmSig = "0xabcdef";
-        await verifier.setExpected(tpmKeyId, userOpHash, tpmSig);
 
         const Harness = await ethers.getContractFactory("QuantumAuthAccountHarness");
         const dummyEntryPoint = "0x0000000000000000000000000000000000000001";
-        const account = await Harness.deploy(dummyEntryPoint, eoa1.address, eoa2.address, await verifier.getAddress(), tpmKeyId);
+
+        const account = await Harness.deploy(
+            dummyEntryPoint,
+            eoa1.address,
+            eoa2.address,
+            await verifier.getAddress(),
+            tpmKeyId
+        );
 
         const abi = ethers.AbiCoder.defaultAbiCoder();
         const bundle = abi.encode(["uint8", "bytes", "bytes", "bytes"], [MODE_NORMAL, "0x", eoa2Sig, tpmSig]);
@@ -78,19 +113,24 @@ describe("QuantumAuthAccount - 2-of-3 policy", function () {
     it("MODE_NORMAL: fails with EOA1 only (no TPM)", async function () {
         const [eoa1, eoa2] = await ethers.getSigners();
 
-        const MockTPMVerifier = await ethers.getContractFactory("MockTPMVerifier");
-        const verifier = await MockTPMVerifier.deploy();
+        const Verifier = await ethers.getContractFactory("TPMVerifierSecp256k1");
+        const verifier = await Verifier.deploy();
 
         const userOpHash = ethers.keccak256(ethers.toUtf8Bytes("op:normal:no-tpm"));
-        const tpmKeyId = ethers.keccak256(ethers.toUtf8Bytes("tpm:key:1"));
+        const tpmKeyId = keyIdFromAddress(eoa1.address);
 
         const eoa1Sig = await eoa1.signMessage(ethers.getBytes(userOpHash));
-        // don't set expected TPM OR pass empty => should fail verify
-        await verifier.setExpected(tpmKeyId, userOpHash, "0xdeadbeef");
 
         const Harness = await ethers.getContractFactory("QuantumAuthAccountHarness");
         const dummyEntryPoint = "0x0000000000000000000000000000000000000001";
-        const account = await Harness.deploy(dummyEntryPoint, eoa1.address, eoa2.address, await verifier.getAddress(), tpmKeyId);
+
+        const account = await Harness.deploy(
+            dummyEntryPoint,
+            eoa1.address,
+            eoa2.address,
+            await verifier.getAddress(),
+            tpmKeyId
+        );
 
         const abi = ethers.AbiCoder.defaultAbiCoder();
         const bundle = abi.encode(["uint8", "bytes", "bytes", "bytes"], [MODE_NORMAL, eoa1Sig, "0x", "0x"]);
@@ -103,18 +143,24 @@ describe("QuantumAuthAccount - 2-of-3 policy", function () {
     it("MODE_RECOVERY: passes with EOA1 + EOA2 (no TPM)", async function () {
         const [eoa1, eoa2] = await ethers.getSigners();
 
-        const MockTPMVerifier = await ethers.getContractFactory("MockTPMVerifier");
-        const verifier = await MockTPMVerifier.deploy();
+        const Verifier = await ethers.getContractFactory("TPMVerifierSecp256k1");
+        const verifier = await Verifier.deploy();
+        const tpmKeyId = keyIdFromAddress(eoa1.address);
 
         const userOpHash = ethers.keccak256(ethers.toUtf8Bytes("op:recovery:2eoa"));
-        const tpmKeyId = ethers.keccak256(ethers.toUtf8Bytes("tpm:key:1"));
-
         const sig1 = await eoa1.signMessage(ethers.getBytes(userOpHash));
         const sig2 = await eoa2.signMessage(ethers.getBytes(userOpHash));
 
         const Harness = await ethers.getContractFactory("QuantumAuthAccountHarness");
         const dummyEntryPoint = "0x0000000000000000000000000000000000000001";
-        const account = await Harness.deploy(dummyEntryPoint, eoa1.address, eoa2.address, await verifier.getAddress(), tpmKeyId);
+
+        const account = await Harness.deploy(
+            dummyEntryPoint,
+            eoa1.address,
+            eoa2.address,
+            await verifier.getAddress(),
+            tpmKeyId
+        );
 
         const abi = ethers.AbiCoder.defaultAbiCoder();
         const bundle = abi.encode(["uint8", "bytes", "bytes", "bytes"], [MODE_RECOVERY, sig1, sig2, "0x"]);
@@ -127,17 +173,23 @@ describe("QuantumAuthAccount - 2-of-3 policy", function () {
     it("MODE_RECOVERY: fails with only one EOA", async function () {
         const [eoa1, eoa2] = await ethers.getSigners();
 
-        const MockTPMVerifier = await ethers.getContractFactory("MockTPMVerifier");
-        const verifier = await MockTPMVerifier.deploy();
+        const Verifier = await ethers.getContractFactory("TPMVerifierSecp256k1");
+        const verifier = await Verifier.deploy();
+        const tpmKeyId = keyIdFromAddress(eoa1.address);
 
         const userOpHash = ethers.keccak256(ethers.toUtf8Bytes("op:recovery:1eoa"));
-        const tpmKeyId = ethers.keccak256(ethers.toUtf8Bytes("tpm:key:1"));
-
         const sig1 = await eoa1.signMessage(ethers.getBytes(userOpHash));
 
         const Harness = await ethers.getContractFactory("QuantumAuthAccountHarness");
         const dummyEntryPoint = "0x0000000000000000000000000000000000000001";
-        const account = await Harness.deploy(dummyEntryPoint, eoa1.address, eoa2.address, await verifier.getAddress(), tpmKeyId);
+
+        const account = await Harness.deploy(
+            dummyEntryPoint,
+            eoa1.address,
+            eoa2.address,
+            await verifier.getAddress(),
+            tpmKeyId
+        );
 
         const abi = ethers.AbiCoder.defaultAbiCoder();
         const bundle = abi.encode(["uint8", "bytes", "bytes", "bytes"], [MODE_RECOVERY, sig1, "0x", "0x"]);
