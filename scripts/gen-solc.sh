@@ -13,12 +13,17 @@ ARGS=(
   --base-path .
   --include-path node_modules
   --include-path contracts
+  --include-path vendor
+  --include-path vendor/account-abstraction
+  --include-path vendor/account-abstraction/contracts
   --optimize --optimize-runs 200
   --abi --bin
   --overwrite
   -o build/solc
   contracts/account/QuantumAuthAccount.sol
   contracts/TPMVerifierSecp256k1.sol
+  vendor/account-abstraction/contracts/core/EntryPoint.sol
+
 )
 
 # Try as ENTRYPOINT (image runs solc by default)
@@ -45,6 +50,9 @@ cp -f build/solc/QuantumAuthAccount.bin bin/QuantumAuthAccount.bin
 
 cp -f build/solc/TPMVerifierSecp256k1.abi abi/TPMVerifierSecp256k1.abi.json
 cp -f build/solc/TPMVerifierSecp256k1.bin bin/TPMVerifierSecp256k1.bin
+
+cp -f build/solc/EntryPoint.abi abi/EntryPoint.abi.json
+cp -f build/solc/EntryPoint.bin bin/EntryPoint.bin
 
 echo "Artifacts:"
 ls -la build/solc abi bin | sed -n '1,200p'
