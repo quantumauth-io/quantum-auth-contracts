@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "hardhat test",
+    "coverage": "hardhat test --coverage",
     "gen:solc": "bash scripts/gen-solc.sh",
     "gen:abigen": "bash scripts/gen-abigen.sh",
     "gen": "pnpm run gen:solc && pnpm run gen:abigen"

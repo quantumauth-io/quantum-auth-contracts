@@ -1,57 +1,185 @@
-# Sample Hardhat 3 Beta Project (`mocha` and `ethers`)
+# QuantumAuth — Account Abstraction with TPM‑Sealed Keys
 
-This project showcases a Hardhat 3 Beta project using `mocha` for tests and the `ethers` library for Ethereum interactions.
+![Contracts CI](https://github.com/quantumauth-io/quantum-auth-contracts/actions/workflows/contracts.yml/badge.svg)
+![Tests CI](https://github.com/quantumauth-io/quantum-auth-contracts/actions/workflows/tests.yml/badge.svg)
+![Coverage](https://codecov.io/gh/quantumauth-io/quantum-auth-contracts/branch/main/graph/badge.svg)
+![Solidity](https://img.shields.io/badge/solidity-^0.8.24-blue)
+![License](https://img.shields.io/badge/license-Apache%202.0-blue)
 
-To learn more about the Hardhat 3 Beta, please visit the [Getting Started guide](https://hardhat.org/docs/getting-started#getting-started-with-hardhat-3). To share your feedback, join our [Hardhat 3 Beta](https://hardhat.org/hardhat3-beta-telegram-group) Telegram group or [open an issue](https://github.com/NomicFoundation/hardhat/issues/new) in our GitHub issue tracker.
+QuantumAuth is an **ERC‑4337 Account Abstraction (AA) smart‑contract system** designed to eliminate traditional private‑key exposure by combining:
 
-## Project Overview
+* **Account Abstraction (ERC‑4337)**
+* **TPM‑sealed cryptographic keys**
+* **Policy‑driven authorization & recovery**
+* **Hardware‑bound security guarantees**
 
-This example project includes:
+This repository contains the **on‑chain contracts**, **deterministic build tooling**, and **Go bindings** used by the QuantumAuth wallet and client stack.
 
-- A simple Hardhat configuration file.
-- Foundry-compatible Solidity unit tests.
-- TypeScript integration tests using `mocha` and ethers.js
-- Examples demonstrating how to connect to different types of networks, including locally simulating OP mainnet.
+---
 
-## Usage
+## 🔐 Security Model
 
-### Running Tests
+### Traditional Wallets
 
-To run all the tests in the project, execute the following command:
+* Private keys stored in software
+* Vulnerable to malware, memory scraping, phishing
+* Single point of failure
 
-```shell
-npx hardhat test
+### QuantumAuth
+
+* Keys are **generated and sealed inside a TPM**
+* Private key material **never leaves hardware**
+* Smart contracts validate **TPM‑backed signatures**
+* Recovery and authorization enforced **on‑chain**
+
+> Even a fully compromised operating system cannot extract or reuse the private key.
+
+---
+
+## 🧩 Architecture
+
+### On‑chain Contracts
+
+* **QuantumAuthAccount.sol**
+  ERC‑4337 compatible Account Abstraction wallet implementing:
+
+    * TPM‑verified signatures
+    * Multi‑mode authorization
+    * Recovery logic
+
+* **TPMVerifierSecp256k1.sol**
+  Verifies secp256k1 signatures produced by TPM‑sealed keys.
+
+* **EntryPoint.sol**
+  Standard ERC‑4337 EntryPoint (pinned, deterministic build).
+
+* **QAERC20.sol**
+  Minimal ERC‑20 used for testing, tooling, and bindings generation.
+
+### Off‑chain
+
+* Deterministic Solidity compilation via Dockerized `solc`
+* Go bindings generated via `abigen`
+* Client handles TPM interaction, policy evaluation, and UserOperation construction
+
+---
+
+## 📦 Repository Structure
+
+```
+contracts/
+  account/QuantumAuthAccount.sol
+  TPMVerifierSecp256k1.sol
+  QAERC20.sol
+
+abi/
+bin/
+bindings/go/
+
+scripts/
+  gen-solc.sh
+  gen-abigen.sh
 ```
 
-You can also selectively run the Solidity or `mocha` tests:
+---
 
-```shell
-npx hardhat test solidity
-npx hardhat test mocha
+## ⚙️ Solidity Version
+
+* **Solidity:** `^0.8.24`
+* Compiled using a **pinned Docker solc image** for reproducibility
+
+---
+
+## 🛠 Build & Code Generation
+
+### Generate ABI / BIN
+
+```bash
+pnpm run gen:solc
 ```
 
-### Make a deployment to Sepolia
+### Generate Go bindings
 
-This project includes an example Ignition module to deploy the contract. You can deploy this module to a locally simulated chain or to Sepolia.
-
-To run the deployment to a local chain:
-
-```shell
-npx hardhat ignition deploy ignition/modules/Counter.ts
+```bash
+pnpm run gen:abigen
 ```
 
-To run the deployment to Sepolia, you need an account with funds to send the transaction. The provided Hardhat configuration includes a Configuration Variable called `SEPOLIA_PRIVATE_KEY`, which you can use to set the private key of the account you want to use.
+### Full generation pipeline
 
-You can set the `SEPOLIA_PRIVATE_KEY` variable using the `hardhat-keystore` plugin or by setting it as an environment variable.
-
-To set the `SEPOLIA_PRIVATE_KEY` config variable using `hardhat-keystore`:
-
-```shell
-npx hardhat keystore set SEPOLIA_PRIVATE_KEY
+```bash
+pnpm run gen
 ```
 
-After setting the variable, you can run the deployment with the Sepolia network:
+> CI enforces that generated artifacts are always committed and up‑to‑date.
 
-```shell
-npx hardhat ignition deploy --network sepolia ignition/modules/Counter.ts
+---
+
+## 🧪 Testing
+
+Tests are executed using **Hardhat**:
+
+```bash
+pnpm test
 ```
+
+Tests cover:
+
+* ERC‑4337 validation flows
+* Signature verification
+* Account recovery modes
+* ERC‑20 interactions
+
+---
+
+## 📊 Coverage
+
+Coverage reporting will be added using `solidity-coverage`.
+
+Planned command:
+
+```bash
+pnpm run coverage
+```
+
+Badge will update automatically once enabled in CI.
+
+---
+
+## 🔄 Deterministic Builds
+
+* Solidity compiled via pinned `solc` version
+* ERC‑4337 EntryPoint pinned to a specific release
+* Generated bytecode and bindings checked in
+* CI guarantees reproducible outputs
+
+---
+
+## 🚦 CI Pipelines
+
+* **contracts** — Solidity compilation & binding generation
+* **tests** — Hardhat test suite
+
+Both pipelines must pass for changes to be accepted.
+
+---
+
+## 📜 License
+
+Licensed under the **Apache License, Version 2.0**.
+
+See [`LICENSE`](LICENSE) for details.
+
+---
+
+## 🧭 Status
+
+QuantumAuth is under **active development**.
+The core architecture is stable; authorization policies and tooling continue to evolve.
+
+---
+
+## 🤝 Contributions
+
+Security reviews, audits, and protocol‑level feedback are welcome.
+
+If you are an Ethereum developer interested in **hardware‑backed Account Abstraction**, your input is especially valuable.
