@@ -1,6 +1,6 @@
 # QuantumAuth — Account Abstraction with TPM‑Sealed Keys
 
-![Contracts CI](https://github.com/quantumauth-io/quantum-auth-contracts/actions/workflows/contracts.yml/badge.svg)
+![Contracts CI](https://github.com/quantumauth-io/quantum-auth-contracts/actions/workflows/bindings.yml/badge.svg)
 ![Tests CI](https://github.com/quantumauth-io/quantum-auth-contracts/actions/workflows/tests.yml/badge.svg)
 ![Coverage](https://codecov.io/gh/quantumauth-io/quantum-auth-contracts/branch/main/graph/badge.svg)
 ![Solidity](https://img.shields.io/badge/solidity-^0.8.24-blue)
