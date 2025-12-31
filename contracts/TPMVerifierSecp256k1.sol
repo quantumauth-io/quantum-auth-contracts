@@ -15,7 +15,7 @@ contract TPMVerifierSecp256k1 is ITPMVerifier {
         bytes32 keyId,
         bytes32 messageHash,
         bytes calldata signature
-    ) external view override returns (bool ok) {
+    ) external pure override returns (bool ok) {
         address expected = address(uint160(uint256(keyId)));
         if (expected == address(0)) return false;
 
