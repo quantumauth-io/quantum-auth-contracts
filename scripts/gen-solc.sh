@@ -8,23 +8,22 @@ cd "$ROOT"
 
 mkdir -p build/solc abi bin
 
-# Common args
 ARGS=(
   --base-path .
   --include-path node_modules
   --include-path contracts
   --include-path vendor
-  --include-path vendor/account-abstraction
-  --include-path vendor/account-abstraction/contracts
   --optimize --optimize-runs 200
   --abi --bin
   --overwrite
   -o build/solc
+
+  --remappings "@openzeppelin/=node_modules/@openzeppelin/ @account-abstraction/=vendor/account-abstraction/"
+
   contracts/account/QuantumAuthAccount.sol
   contracts/TPMVerifierSecp256k1.sol
   vendor/account-abstraction/contracts/core/EntryPoint.sol
   contracts/QAERC20.sol
-
 )
 
 # Try as ENTRYPOINT (image runs solc by default)
