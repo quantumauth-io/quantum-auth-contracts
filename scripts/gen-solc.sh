@@ -23,26 +23,18 @@ ARGS=(
   contracts/account/QuantumAuthAccount.sol
   contracts/TPMVerifierSecp256k1.sol
   vendor/account-abstraction/contracts/core/EntryPoint.sol
+  contracts/QAERC20.sol
 
 )
 
 # Try as ENTRYPOINT (image runs solc by default)
-if docker run --rm \
+docker run --rm \
   -u "$(id -u)":"$(id -g)" \
   -v "$ROOT:/workspace" \
   -w /workspace \
   "$SOLC_IMAGE" \
-  "${ARGS[@]}"; then
-  echo "solc via image entrypoint OK"
-else
-  echo "entrypoint mode failed; trying explicit 'solc' command..."
-  docker run --rm \
-    -u "$(id -u)":"$(id -g)" \
-    -v "$ROOT:/workspace" \
-    -w /workspace \
-    "$SOLC_IMAGE" \
-    solc "${ARGS[@]}"
-fi
+  "${ARGS[@]}"
+
 
 # Normalize output locations
 cp -f build/solc/QuantumAuthAccount.abi abi/QuantumAuthAccount.abi.json
@@ -53,6 +45,9 @@ cp -f build/solc/TPMVerifierSecp256k1.bin bin/TPMVerifierSecp256k1.bin
 
 cp -f build/solc/EntryPoint.abi abi/EntryPoint.abi.json
 cp -f build/solc/EntryPoint.bin bin/EntryPoint.bin
+
+cp -f build/solc/QAERC20.abi abi/QAERC20.abi.json
+cp -f build/solc/QAERC20.bin bin/QAERC20.bin
 
 echo "Artifacts:"
 ls -la build/solc abi bin | sed -n '1,200p'
