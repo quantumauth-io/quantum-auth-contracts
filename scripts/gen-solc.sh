@@ -8,6 +8,15 @@ cd "$ROOT"
 
 mkdir -p build/solc abi bin
 
+# Make import prefixes resolvable WITHOUT solc remappings:
+# @account-abstraction/...  -> vendor/account-abstraction/...
+mkdir -p vendor/@account-abstraction
+# use symlink if possible; fallback to copy on systems that don't like symlinks
+if [ ! -e vendor/@account-abstraction/contracts ]; then
+  ln -s ../account-abstraction/contracts vendor/@account-abstraction/contracts 2>/dev/null || true
+fi
+
+
 ARGS=(
   --base-path .
   --include-path node_modules
@@ -17,8 +26,6 @@ ARGS=(
   --abi --bin
   --overwrite
   -o build/solc
-
-  --remappings "@openzeppelin/=node_modules/@openzeppelin/ @account-abstraction/=vendor/account-abstraction/"
 
   contracts/account/QuantumAuthAccount.sol
   contracts/TPMVerifierSecp256k1.sol
