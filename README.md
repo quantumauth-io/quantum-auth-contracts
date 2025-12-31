@@ -6,6 +6,8 @@
 ![Solidity](https://img.shields.io/badge/solidity-^0.8.24-blue)
 ![License](https://img.shields.io/badge/license-Apache%202.0-blue)
 
+![Coverage Sunburst](https://codecov.io/gh/quantumauth-io/quantum-auth-contracts/graphs/sunburst.svg?token=DJ2BW8cVMo)
+
 QuantumAuth is an **ERC‑4337 Account Abstraction (AA) smart‑contract system** designed to eliminate traditional private‑key exposure by combining:
 
 * **Account Abstraction (ERC‑4337)**
