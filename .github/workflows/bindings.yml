@@ -21,6 +21,9 @@ jobs:
       - name: Enable Corepack (pnpm from packageManager)
         run: corepack enable
 
+      - name: Configure pnpm
+        run: pnpm config set node-linker hoisted
+
       - name: Install deps
         run: pnpm install --frozen-lockfile
 
