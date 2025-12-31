@@ -31,8 +31,8 @@ var (
 
 // TPMVerifierSecp256k1MetaData contains all meta data concerning the TPMVerifierSecp256k1 contract.
 var TPMVerifierSecp256k1MetaData = &bind.MetaData{
-	ABI: "[{\"inputs\":[],\"name\":\"BadSigLength\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"InvalidKeyId\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"InvalidSig\",\"type\":\"error\"},{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"keyId\",\"type\":\"bytes32\"},{\"internalType\":\"bytes32\",\"name\":\"messageHash\",\"type\":\"bytes32\"},{\"internalType\":\"bytes\",\"name\":\"signature\",\"type\":\"bytes\"}],\"name\":\"verify\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"ok\",\"type\":\"bool\"}],\"stateMutability\":\"view\",\"type\":\"function\"}]",
-	Bin: "0x6080604052348015600e575f5ffd5b506102638061001c5f395ff3fe608060405234801561000f575f5ffd5b5060043610610029575f3560e01c8063de12c6401461002d575b5f5ffd5b61004061003b366004610186565b610054565b604051901515815260200160405180910390f35b5f846001600160a01b03811661006d575f915050610132565b6041831461007e575f915050610132565b5f5f5f61008b878761013a565b9250925092505f6001898386866040515f81526020016040526040516100cd949392919093845260ff9290921660208401526040830152606082015260800190565b6020604051602081039080840390855afa1580156100ed573d5f5f3e3d5ffd5b5050604051601f1901519150506001600160a01b038116610115575f95505050505050610132565b846001600160a01b0316816001600160a01b031614955050505050505b949350505050565b8135602083013560408401355f1a601b81101561015f5761015c601b82610202565b90505b8060ff16601b1415801561017757508060ff16601c14155b1561017f57505f5b9250925092565b5f5f5f5f60608587031215610199575f5ffd5b8435935060208501359250604085013567ffffffffffffffff8111156101bd575f5ffd5b8501601f810187136101cd575f5ffd5b803567ffffffffffffffff8111156101e3575f5ffd5b8760208284010111156101f4575f5ffd5b949793965060200194505050565b60ff818116838216019081111561022757634e487b7160e01b5f52601160045260245ffd5b9291505056fea26469706673582212205ed1d85925916de2e12d43ae2ef5b0dc27576a9e537681641fd292e3969f518464736f6c634300081c0033",
+	ABI: "[{\"inputs\":[],\"name\":\"BadSigLength\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"InvalidKeyId\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"InvalidSig\",\"type\":\"error\"},{\"inputs\":[{\"internalType\":\"bytes32\",\"name\":\"keyId\",\"type\":\"bytes32\"},{\"internalType\":\"bytes32\",\"name\":\"messageHash\",\"type\":\"bytes32\"},{\"internalType\":\"bytes\",\"name\":\"signature\",\"type\":\"bytes\"}],\"name\":\"verify\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"ok\",\"type\":\"bool\"}],\"stateMutability\":\"pure\",\"type\":\"function\"}]",
+	Bin: "0x6080604052348015600e575f5ffd5b506102638061001c5f395ff3fe608060405234801561000f575f5ffd5b5060043610610029575f3560e01c8063de12c6401461002d575b5f5ffd5b61004061003b366004610186565b610054565b604051901515815260200160405180910390f35b5f846001600160a01b03811661006d575f915050610132565b6041831461007e575f915050610132565b5f5f5f61008b878761013a565b9250925092505f6001898386866040515f81526020016040526040516100cd949392919093845260ff9290921660208401526040830152606082015260800190565b6020604051602081039080840390855afa1580156100ed573d5f5f3e3d5ffd5b5050604051601f1901519150506001600160a01b038116610115575f95505050505050610132565b846001600160a01b0316816001600160a01b031614955050505050505b949350505050565b8135602083013560408401355f1a601b81101561015f5761015c601b82610202565b90505b8060ff16601b1415801561017757508060ff16601c14155b1561017f57505f5b9250925092565b5f5f5f5f60608587031215610199575f5ffd5b8435935060208501359250604085013567ffffffffffffffff8111156101bd575f5ffd5b8501601f810187136101cd575f5ffd5b803567ffffffffffffffff8111156101e3575f5ffd5b8760208284010111156101f4575f5ffd5b949793965060200194505050565b60ff818116838216019081111561022757634e487b7160e01b5f52601160045260245ffd5b9291505056fea26469706673582212203cbb9ab82a5856d5ed23d3d29240ba12c9f030c15ca30740f57418fcb6fdf44b64736f6c634300081c0033",
 }
 
 // TPMVerifierSecp256k1ABI is the input ABI used to generate the binding from.
@@ -204,7 +204,7 @@ func (_TPMVerifierSecp256k1 *TPMVerifierSecp256k1TransactorRaw) Transact(opts *b
 
 // Verify is a free data retrieval call binding the contract method 0xde12c640.
 //
-// Solidity: function verify(bytes32 keyId, bytes32 messageHash, bytes signature) view returns(bool ok)
+// Solidity: function verify(bytes32 keyId, bytes32 messageHash, bytes signature) pure returns(bool ok)
 func (_TPMVerifierSecp256k1 *TPMVerifierSecp256k1Caller) Verify(opts *bind.CallOpts, keyId [32]byte, messageHash [32]byte, signature []byte) (bool, error) {
 	var out []interface{}
 	err := _TPMVerifierSecp256k1.contract.Call(opts, &out, "verify", keyId, messageHash, signature)
@@ -221,14 +221,14 @@ func (_TPMVerifierSecp256k1 *TPMVerifierSecp256k1Caller) Verify(opts *bind.CallO
 
 // Verify is a free data retrieval call binding the contract method 0xde12c640.
 //
-// Solidity: function verify(bytes32 keyId, bytes32 messageHash, bytes signature) view returns(bool ok)
+// Solidity: function verify(bytes32 keyId, bytes32 messageHash, bytes signature) pure returns(bool ok)
 func (_TPMVerifierSecp256k1 *TPMVerifierSecp256k1Session) Verify(keyId [32]byte, messageHash [32]byte, signature []byte) (bool, error) {
 	return _TPMVerifierSecp256k1.Contract.Verify(&_TPMVerifierSecp256k1.CallOpts, keyId, messageHash, signature)
 }
 
 // Verify is a free data retrieval call binding the contract method 0xde12c640.
 //
-// Solidity: function verify(bytes32 keyId, bytes32 messageHash, bytes signature) view returns(bool ok)
+// Solidity: function verify(bytes32 keyId, bytes32 messageHash, bytes signature) pure returns(bool ok)
 func (_TPMVerifierSecp256k1 *TPMVerifierSecp256k1CallerSession) Verify(keyId [32]byte, messageHash [32]byte, signature []byte) (bool, error) {
 	return _TPMVerifierSecp256k1.Contract.Verify(&_TPMVerifierSecp256k1.CallOpts, keyId, messageHash, signature)
 }
