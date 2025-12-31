@@ -24,6 +24,12 @@ jobs:
       - name: Install deps
         run: pnpm install --frozen-lockfile
 
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+          fetch-depth: 0
+
       - name: Setup Go
         uses: actions/setup-go@v5
         with:
