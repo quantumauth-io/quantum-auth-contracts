@@ -1,0 +1,13 @@
+coverage:
+  status:
+    project:
+      default:
+        target: auto
+
+ignore:
+  - "contracts/mocks/**"
+  - "vendor/**"
+  - "bindings/**"
+  - "abi/**"
+  - "bin/**"
+  - "build/**"

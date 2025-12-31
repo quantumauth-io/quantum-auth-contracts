@@ -3,6 +3,7 @@ import { configVariable, defineConfig } from "hardhat/config";
 import "@nomicfoundation/hardhat-ethers";
 
 export default defineConfig({
+
   plugins: [hardhatToolboxMochaEthersPlugin],
   solidity: {
     profiles: {
@@ -35,5 +36,7 @@ export default defineConfig({
       url: configVariable("SEPOLIA_RPC_URL"),
       accounts: [configVariable("SEPOLIA_PRIVATE_KEY")],
     },
+
   },
+
 });
