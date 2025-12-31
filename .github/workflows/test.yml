@@ -21,8 +21,10 @@ jobs:
         with:
           node-version: "22.10.0"
 
-      - name: Enable Corepack (pnpm from packageManager)
-        run: corepack enable
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10.18.3
 
       - name: Configure pnpm
         run: pnpm config set node-linker hoisted
