@@ -4,11 +4,16 @@ set -euo pipefail
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$ROOT"
 
-# Ensure forge exists
+# Ensure forge exists (IDE may not inherit shell PATH)
 FORGE="$(command -v forge || true)"
+if [ -z "$FORGE" ] && [ -x "$HOME/.foundry/bin/forge" ]; then
+  FORGE="$HOME/.foundry/bin/forge"
+fi
+
 if [ -z "$FORGE" ]; then
   echo "forge not found."
   echo "Install with: curl -L https://foundry.paradigm.xyz | bash && foundryup"
+  echo "Or add to PATH: export PATH=\$HOME/.foundry/bin:\$PATH"
   exit 1
 fi
 
@@ -49,6 +54,7 @@ copy_artifact () {
 
 copy_artifact "QuantumAuthAccount" "QuantumAuthAccount" "out/QuantumAuthAccount.sol"
 copy_artifact "TPMVerifierSecp256k1" "TPMVerifierSecp256k1" "out/TPMVerifierSecp256k1.sol"
+copy_artifact "QAERC20" "QAERC20" "out/QAERC20.sol"
 
 # --- Compile EntryPoint (real contract) with solc in Docker for Go bindings ---
 SOLC_IMAGE="${SOLC_IMAGE:-ghcr.io/argotorg/solc:0.8.28}"
