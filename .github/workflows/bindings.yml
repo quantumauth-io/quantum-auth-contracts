@@ -35,10 +35,7 @@ jobs:
           go install github.com/ethereum/go-ethereum/cmd/abigen@v1.16.7
           echo "$(go env GOPATH)/bin" >> $GITHUB_PATH
 
-      - name: Forge build
-        run: forge build
-
-      - name: Generate ABI/BIN (Foundry)
+      - name: Generate ABI/BIN (Foundry + solc for EntryPoint)
         run: bash scripts/gen-solc.sh
 
       - name: Generate Go bindings
@@ -47,8 +44,11 @@ jobs:
       - name: Ensure generated outputs are committed
         run: |
           git status --porcelain
-          if [ -n "$(git status --porcelain)" ]; then
-            echo "Generated files are out of date. Run: scripts/gen-solc.sh && scripts/gen-abigen.sh and commit."
-            git diff
+          if [ -n "$(git status --porcelain -- abi bin bindings)" ]; then
+            echo "❌ Generated outputs changed."
+            echo "Run locally:"
+            echo "  bash scripts/gen-solc.sh && bash scripts/gen-abigen.sh"
+            echo "  git add abi bin bindings && git commit"
+            git --no-pager diff -- abi bin bindings
             exit 1
           fi
