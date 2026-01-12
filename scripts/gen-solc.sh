@@ -66,12 +66,12 @@ docker run --rm \
   --include-path contracts \
   --include-path lib/account-abstraction/contracts \
   --include-path lib/openzeppelin-contracts/contracts \
-  --import-remappings "@openzeppelin/contracts/=lib/openzeppelin-contracts/contracts/" \
-  --import-remappings "@account-abstraction/contracts/=lib/account-abstraction/contracts/" \
   --optimize --optimize-runs 200 \
   --abi --bin \
   --overwrite \
   -o build/solc \
+  "@openzeppelin/contracts/=lib/openzeppelin-contracts/contracts/" \
+  "@account-abstraction/contracts/=lib/account-abstraction/contracts/" \
   lib/account-abstraction/contracts/core/EntryPoint.sol
 
 cp -f build/solc/EntryPoint.abi abi/EntryPoint.abi.json
