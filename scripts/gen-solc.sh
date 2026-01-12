@@ -1,50 +1,83 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-SOLC_IMAGE="${SOLC_IMAGE:-ghcr.io/argotorg/solc:0.8.28}"
-
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$ROOT"
 
-mkdir -p build/solc abi bin
+# Ensure forge exists
+FORGE="$(command -v forge || true)"
+if [ -z "$FORGE" ]; then
+  echo "forge not found."
+  echo "Install with: curl -L https://foundry.paradigm.xyz | bash && foundryup"
+  exit 1
+fi
 
+# Ensure jq exists
+JQ="$(command -v jq || true)"
+if [ -z "$JQ" ]; then
+  echo "jq not found."
+  echo "Install with: sudo apt-get install -y jq"
+  exit 1
+fi
 
-ARGS=(
-  --base-path .
-  --include-path node_modules
-  --include-path contracts
-  --optimize --optimize-runs 200
-  --abi --bin
-  --overwrite
-  -o build/solc
+# Build with Foundry (expects foundry.toml at repo root)
+"$FORGE" --version
+# IMPORTANT: ensure artifacts exist even if forge would "skip"
+"$FORGE" clean --root "$ROOT"
+"$FORGE" build --root "$ROOT"
 
-  contracts/account/QuantumAuthAccount.sol
-  contracts/TPMVerifierSecp256k1.sol
-  node_modules/@account-abstraction/contracts/core/EntryPoint.sol
-  contracts/QAERC20.sol
-)
+mkdir -p abi bin
 
-# Try as ENTRYPOINT (image runs solc by default)
+# Helper: copy ABI+BIN from Foundry out/ tree into stable locations
+copy_artifact () {
+  local contract="$1"   # output name (e.g. QuantumAuthAccount)
+  local type_name="$2"  # contract type name in artifact json
+  local out_dir="$3"    # e.g. out/account/QuantumAuthAccount.sol
+  local json="$out_dir/$type_name.json"
+
+  if [ ! -f "$json" ]; then
+    echo "Missing Foundry artifact: $json"
+    exit 1
+  fi
+
+  "$JQ" -c '.abi' "$json" > "abi/$contract.abi.json"
+  "$JQ" -r '.bytecode.object' "$json" > "bin/$contract.bin"
+
+  test -s "abi/$contract.abi.json"
+  test -s "bin/$contract.bin"
+}
+
+copy_artifact "QuantumAuthAccount" "QuantumAuthAccount" "out/QuantumAuthAccount.sol"
+copy_artifact "TPMVerifierSecp256k1" "TPMVerifierSecp256k1" "out/TPMVerifierSecp256k1.sol"
+
+# --- Compile EntryPoint (real contract) with solc in Docker for Go bindings ---
+SOLC_IMAGE="${SOLC_IMAGE:-ghcr.io/argotorg/solc:0.8.28}"
+
+mkdir -p build/solc
+
 docker run --rm \
   -u "$(id -u)":"$(id -g)" \
   -v "$ROOT:/workspace" \
   -w /workspace \
   "$SOLC_IMAGE" \
-  "${ARGS[@]}"
-
-
-# Normalize output locations
-cp -f build/solc/QuantumAuthAccount.abi abi/QuantumAuthAccount.abi.json
-cp -f build/solc/QuantumAuthAccount.bin bin/QuantumAuthAccount.bin
-
-cp -f build/solc/TPMVerifierSecp256k1.abi abi/TPMVerifierSecp256k1.abi.json
-cp -f build/solc/TPMVerifierSecp256k1.bin bin/TPMVerifierSecp256k1.bin
+  --base-path . \
+  --include-path lib \
+  --include-path contracts \
+  --include-path lib/account-abstraction/contracts \
+  --include-path lib/openzeppelin-contracts/contracts \
+  --optimize --optimize-runs 200 \
+  --abi --bin \
+  --overwrite \
+  -o build/solc \
+  "@openzeppelin/contracts/=lib/openzeppelin-contracts/contracts/" \
+  "@account-abstraction/contracts/=lib/account-abstraction/contracts/" \
+  lib/account-abstraction/contracts/core/EntryPoint.sol
 
 cp -f build/solc/EntryPoint.abi abi/EntryPoint.abi.json
 cp -f build/solc/EntryPoint.bin bin/EntryPoint.bin
 
-cp -f build/solc/QAERC20.abi abi/QAERC20.abi.json
-cp -f build/solc/QAERC20.bin bin/QAERC20.bin
+test -s abi/EntryPoint.abi.json
+test -s bin/EntryPoint.bin
 
 echo "Artifacts:"
-ls -la build/solc abi bin | sed -n '1,200p'
+ls -la abi bin | sed -n '1,200p'

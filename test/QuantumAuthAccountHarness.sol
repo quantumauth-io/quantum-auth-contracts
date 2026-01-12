@@ -1,10 +1,10 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.23;
 
-import { QuantumAuthAccount } from "../account/QuantumAuthAccount.sol";
+import { QuantumAuthAccount } from "../contracts/account/QuantumAuthAccount.sol";
 import { IEntryPoint } from "@account-abstraction/contracts/interfaces/IEntryPoint.sol";
 import { PackedUserOperation } from "@account-abstraction/contracts/interfaces/PackedUserOperation.sol";
-import { ITPMVerifier } from "../interfaces/ITPMVerifier.sol";
+import { ITPMVerifier } from "../contracts/interfaces/ITPMVerifier.sol";
 
 contract QuantumAuthAccountHarness is QuantumAuthAccount {
     constructor(

@@ -8,36 +8,37 @@ on:
 jobs:
   coverage:
     runs-on: ubuntu-latest
+
     steps:
-      - name: Checkout
+      - name: Checkout (with submodules)
         uses: actions/checkout@v4
         with:
           submodules: recursive
           fetch-depth: 0
 
-      - name: Setup Node
-        uses: actions/setup-node@v4
+      - name: Install Foundry
+        uses: foundry-rs/foundry-toolchain@v1
         with:
-          node-version: "22.10.0"
+          version: "v1.5.1"
 
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v4
-        with:
-          version: 10.18.3
+      - name: Install lcov
+        run: sudo apt-get update && sudo apt-get install -y lcov
 
-      - name: Configure pnpm
-        run: pnpm config set node-linker hoisted
+      # Optional but helps keep coverage stable between runs
+      - name: Forge build
+        run: forge build
 
-      - name: Install deps
-        run: pnpm install --frozen-lockfile
-
-      - name: Run coverage (Hardhat 3)
-        run: pnpm run coverage
+      - name: Run coverage (Foundry -> lcov)
+        run: |
+          forge coverage --report lcov
+          # Foundry outputs lcov.info in the repo root by default
+          test -f lcov.info
+          lcov --summary lcov.info
 
       - name: Upload to Codecov
         uses: codecov/codecov-action@v4
         with:
-          files: coverage/lcov.info
+          files: lcov.info
           flags: solidity
           fail_ci_if_error: true
         env:
