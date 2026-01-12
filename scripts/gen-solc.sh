@@ -22,8 +22,9 @@ fi
 
 # Build with Foundry (expects foundry.toml at repo root)
 "$FORGE" --version
-rm -rf out cache
-"$FORGE" build --force
+# IMPORTANT: ensure artifacts exist even if forge would "skip"
+"$FORGE" clean --root "$ROOT"
+"$FORGE" build --root "$ROOT"
 
 mkdir -p abi bin
 
@@ -46,7 +47,7 @@ copy_artifact () {
   test -s "bin/$contract.bin"
 }
 
-copy_artifact "QuantumAuthAccount" "QuantumAuthAccount" "out/account/QuantumAuthAccount.sol"
+copy_artifact "QuantumAuthAccount" "QuantumAuthAccount" "out/QuantumAuthAccount.sol"
 copy_artifact "TPMVerifierSecp256k1" "TPMVerifierSecp256k1" "out/TPMVerifierSecp256k1.sol"
 copy_artifact "QAERC20" "QAERC20" "out/QAERC20.sol"
 
