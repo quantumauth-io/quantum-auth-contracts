@@ -63,9 +63,11 @@ docker run --rm \
   "$SOLC_IMAGE" \
   --base-path . \
   --include-path lib \
+  --include-path contracts \
   --include-path lib/account-abstraction/contracts \
   --include-path lib/openzeppelin-contracts/contracts \
-  --include-path contracts \
+  --import-remappings "@openzeppelin/contracts/=lib/openzeppelin-contracts/contracts/" \
+  --import-remappings "@account-abstraction/contracts/=lib/account-abstraction/contracts/" \
   --optimize --optimize-runs 200 \
   --abi --bin \
   --overwrite \
