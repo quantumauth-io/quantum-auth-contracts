@@ -6,8 +6,9 @@
   "engines": { "node": ">=22.10.0" },
   "packageManager": "pnpm@10.18.3",
   "scripts": {
+    "gen:solc": "bash scripts/gen-solc.sh",
     "gen:abigen": "bash scripts/gen-abigen.sh",
-    "gen": "pnpm run gen:abigen"
+    "gen": "pnpm run gen:solc && pnpm run gen:abigen"
   },
   "license": "Apache-2.0"
 }
