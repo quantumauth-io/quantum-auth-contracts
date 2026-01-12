@@ -43,6 +43,14 @@ jobs:
           go install github.com/ethereum/go-ethereum/cmd/abigen@v1.16.7
           echo "$(go env GOPATH)/bin" >> $GITHUB_PATH
 
+      - name: Install jq
+        run: sudo apt-get update && sudo apt-get install -y jq
+
+      - name: Install Foundry
+        uses: foundry-rs/foundry-toolchain@v1
+        with:
+          version: "1.5.1"
+
       - name: Generate ABI/BIN with solc
         run: pnpm run gen:solc
 
