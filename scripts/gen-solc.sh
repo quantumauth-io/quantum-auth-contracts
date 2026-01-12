@@ -22,7 +22,7 @@ fi
 
 # Build with Foundry (expects foundry.toml at repo root)
 "$FORGE" --version
-"$FORGE" build
+"$FORGE" build --force
 
 mkdir -p abi bin
 
