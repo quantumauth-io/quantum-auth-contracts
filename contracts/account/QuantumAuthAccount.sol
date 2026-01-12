@@ -23,13 +23,13 @@ contract QuantumAuthAccount is BaseAccount {
     uint8 internal constant MODE_NORMAL = 0;   // TPM + (EOA1 OR EOA2)
     uint8 internal constant MODE_RECOVERY = 1; // EOA1 + EOA2
 
-    IEntryPoint private immutable _entryPoint;
+    IEntryPoint private immutable _ENTRY_POINT;
 
-    address public immutable eoa1;
-    address public immutable eoa2;
+    address public immutable EOA1;
+    address public immutable EOA2;
 
-    ITPMVerifier public immutable tpmVerifier;
-    bytes32 public immutable tpmKeyId;
+    ITPMVerifier public immutable TPM_VERIFIER;
+    bytes32 public immutable TPM_KEY_ID;
 
     error InvalidEOA();
     error InvalidTPMVerifier();
@@ -38,8 +38,12 @@ contract QuantumAuthAccount is BaseAccount {
     error InvalidMode();
 
     modifier onlyEntryPoint() {
-        if (msg.sender != address(_entryPoint)) revert OnlyEntryPoint();
+        _onlyEntryPoint();
         _;
+    }
+
+    function _onlyEntryPoint() internal view {
+        if (msg.sender != address(_ENTRY_POINT)) revert OnlyEntryPoint();
     }
 
     constructor(
@@ -52,16 +56,16 @@ contract QuantumAuthAccount is BaseAccount {
         if (eoa1_ == address(0) || eoa2_ == address(0) || eoa1_ == eoa2_) revert InvalidEOA();
         if (address(tpmVerifier_) == address(0)) revert InvalidTPMVerifier();
 
-        _entryPoint = entryPoint_;
-        eoa1 = eoa1_;
-        eoa2 = eoa2_;
+        _ENTRY_POINT = entryPoint_;
+        EOA1 = eoa1_;
+        EOA2 = eoa2_;
 
-        tpmVerifier = tpmVerifier_;
-        tpmKeyId = tpmKeyId_;
+        TPM_VERIFIER = tpmVerifier_;
+        TPM_KEY_ID = tpmKeyId_;
     }
 
     function entryPoint() public view override returns (IEntryPoint) {
-        return _entryPoint;
+        return _ENTRY_POINT;
     }
 
     /// @notice Execute a call from the account.
@@ -96,13 +100,13 @@ contract QuantumAuthAccount is BaseAccount {
 
         bytes32 ethHash = userOpHash.toEthSignedMessageHash();
 
-        bool okEoa1 = _isValidEOASig(ethHash, sig1, eoa1);
-        bool okEoa2 = _isValidEOASig(ethHash, sig2, eoa2);
+        bool okEoa1 = _isValidEoaSig(ethHash, sig1, EOA1);
+        bool okEoa2 = _isValidEoaSig(ethHash, sig2, EOA2);
 
         if (mode == MODE_NORMAL) {
             // TPM + (EOA1 OR EOA2)
             if (!(okEoa1 || okEoa2)) return 1;
-            if (!tpmVerifier.verify(tpmKeyId, userOpHash, tpmSig)) return 1;
+            if (!TPM_VERIFIER.verify(TPM_KEY_ID, userOpHash, tpmSig)) return 1;
             return 0;
         }
 
@@ -115,7 +119,7 @@ contract QuantumAuthAccount is BaseAccount {
         revert InvalidMode();
     }
 
-    function _isValidEOASig(bytes32 ethHash, bytes memory sig, address expected) internal pure returns (bool) {
+    function _isValidEoaSig(bytes32 ethHash, bytes memory sig, address expected) internal pure returns (bool) {
         if (sig.length == 0) return false;
         return ethHash.recover(sig) == expected;
     }

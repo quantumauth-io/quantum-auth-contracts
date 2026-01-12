@@ -8,7 +8,7 @@ import {Ownable} from "@openzeppelin/contracts/access/Ownable.sol";
 /// @notice Simple mintable ERC20 for local testing / bindings generation.
 /// @dev No EIP-2612 permit by design.
 contract QAERC20 is ERC20, Ownable {
-    uint8 private immutable _customDecimals;
+    uint8 private immutable _CUSTOM_DECIMALS;
 
     constructor(
         string memory name_,
@@ -16,11 +16,11 @@ contract QAERC20 is ERC20, Ownable {
         uint8 decimals_,
         address owner_
     ) ERC20(name_, symbol_) Ownable(owner_) {
-        _customDecimals = decimals_;
+        _CUSTOM_DECIMALS = decimals_;
     }
 
     function decimals() public view override returns (uint8) {
-        return _customDecimals;
+        return _CUSTOM_DECIMALS;
     }
 
     /// @notice Mint tokens to an address (owner-only).
