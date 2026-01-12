@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.23;
+pragma solidity ^0.8.28;
 
 /// @notice Verifies TPM-originated signatures for a given key.
 /// The verifier can be implemented in different ways:

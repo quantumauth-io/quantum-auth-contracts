@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.23;
+pragma solidity ^0.8.28;
 
 import { BaseAccount } from "@account-abstraction/contracts/core/BaseAccount.sol";
 import { IEntryPoint } from "@account-abstraction/contracts/interfaces/IEntryPoint.sol";
@@ -77,12 +77,6 @@ contract QuantumAuthAccount is BaseAccount {
                 revert(add(ret, 0x20), mload(ret))
             }
         }
-    }
-
-    /// @notice Optional: withdraw ETH accidentally sent to the account.
-    /// @dev Keep ownerless withdrawals out of MVP; require BOTH EOAs (recovery-style) via AA flow if needed later.
-    function withdraw(address payable /*to*/, uint256 /*amount*/) external pure {
-        revert NotAuthorized();
     }
 
     receive() external payable {}

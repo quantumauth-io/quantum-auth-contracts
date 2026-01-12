@@ -1,0 +1,45 @@
+name: coverage
+
+on:
+  push:
+    branches: [ "**" ]
+  pull_request:
+
+jobs:
+  coverage:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout (with submodules)
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+          fetch-depth: 0
+
+      - name: Install Foundry
+        uses: foundry-rs/foundry-toolchain@v1
+        with:
+          version: "v1.5.1"
+
+      - name: Install lcov
+        run: sudo apt-get update && sudo apt-get install -y lcov
+
+      # Optional but helps keep coverage stable between runs
+      - name: Forge build
+        run: forge build
+
+      - name: Run coverage (Foundry -> lcov)
+        run: |
+          forge coverage --report lcov
+          # Foundry outputs lcov.info in the repo root by default
+          test -f lcov.info
+          lcov --summary lcov.info
+
+      - name: Upload to Codecov
+        uses: codecov/codecov-action@v4
+        with:
+          files: lcov.info
+          flags: solidity
+          fail_ci_if_error: true
+        env:
+          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
