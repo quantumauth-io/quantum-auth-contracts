@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.28;
 
-import "forge-std/Test.sol";
+import { Test } from "forge-std/Test.sol";
 import { TPMVerifierSecp256k1 } from "../contracts/TPMVerifierSecp256k1.sol";
 
 contract TPMVerifierSecp256k1Test is Test {
@@ -24,7 +24,7 @@ contract TPMVerifierSecp256k1Test is Test {
         return abi.encodePacked(r, s, vv);
     }
 
-    function test_verify_returnsFalse_onBadSigLength() public {
+    function test_verify_returnsFalse_onBadSigLength() public view {
         bytes32 keyId = keyIdFromAddress(a1);
         bytes32 h = keccak256("x");
         bytes memory sig = hex"1234"; // too short
@@ -33,7 +33,7 @@ contract TPMVerifierSecp256k1Test is Test {
         assertFalse(ok);
     }
 
-    function test_verify_returnsFalse_onInvalidKeyId() public {
+    function test_verify_returnsFalse_onInvalidKeyId() public view {
         bytes32 h = keccak256("x");
         bytes memory sig = sigRaw(SK1, h);
 
@@ -41,7 +41,7 @@ contract TPMVerifierSecp256k1Test is Test {
         assertFalse(ok);
     }
 
-    function test_verify_returnsFalse_onInvalidSig() public {
+    function test_verify_returnsFalse_onInvalidSig() public view {
         bytes32 keyId = keyIdFromAddress(a1);
         bytes32 h = keccak256("x");
 
@@ -52,7 +52,7 @@ contract TPMVerifierSecp256k1Test is Test {
         assertFalse(ok);
     }
 
-    function test_verify_ok_trueOnValidSig() public {
+    function test_verify_ok_trueOnValidSig() public view {
         bytes32 keyId = keyIdFromAddress(a1);
         bytes32 h = keccak256("x");
         bytes memory sig = sigRaw(SK1, h);
@@ -61,7 +61,7 @@ contract TPMVerifierSecp256k1Test is Test {
         assertTrue(ok);
     }
 
-    function test_verify_returnsFalse_onBadV() public {
+    function test_verify_returnsFalse_onBadV() public view {
         bytes32 keyId = keyIdFromAddress(a1);
         bytes32 h = keccak256("badv");
 
@@ -74,7 +74,7 @@ contract TPMVerifierSecp256k1Test is Test {
         assertFalse(ok);
     }
 
-    function test_verify_returnsFalse_onZeroRecover() public {
+    function test_verify_returnsFalse_onZeroRecover() public view {
         bytes32 keyId = keyIdFromAddress(a1);
         bytes32 h = keccak256("zerorecover");
 
@@ -86,7 +86,7 @@ contract TPMVerifierSecp256k1Test is Test {
         assertFalse(ok);
     }
 
-    function test_verify_returnsFalse_onHighS() public {
+    function test_verify_returnsFalse_onHighS() public view {
         bytes32 keyId = keyIdFromAddress(a1);
         bytes32 h = keccak256("highs");
 

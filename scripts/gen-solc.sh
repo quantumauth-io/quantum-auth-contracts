@@ -49,7 +49,6 @@ copy_artifact () {
 
 copy_artifact "QuantumAuthAccount" "QuantumAuthAccount" "out/QuantumAuthAccount.sol"
 copy_artifact "TPMVerifierSecp256k1" "TPMVerifierSecp256k1" "out/TPMVerifierSecp256k1.sol"
-copy_artifact "QAERC20" "QAERC20" "out/QAERC20.sol"
 
 # --- Compile EntryPoint (real contract) with solc in Docker for Go bindings ---
 SOLC_IMAGE="${SOLC_IMAGE:-ghcr.io/argotorg/solc:0.8.28}"
