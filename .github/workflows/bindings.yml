@@ -34,6 +34,9 @@ jobs:
           go install github.com/ethereum/go-ethereum/cmd/abigen@v1.16.7
           echo "$(go env GOPATH)/bin" >> $GITHUB_PATH
 
+      - name: Forge build
+        run: forge build
+
       - name: Generate ABI/BIN (Foundry)
         run: bash scripts/gen-solc.sh
 

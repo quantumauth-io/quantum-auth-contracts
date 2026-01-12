@@ -12,42 +12,69 @@ if [ -z "$FORGE" ]; then
   exit 1
 fi
 
-# Build with Foundry (expects foundry.toml in repo root of contracts)
+# Ensure jq exists
+JQ="$(command -v jq || true)"
+if [ -z "$JQ" ]; then
+  echo "jq not found."
+  echo "Install with: sudo apt-get install -y jq"
+  exit 1
+fi
+
+# Build with Foundry (expects foundry.toml at repo root)
 "$FORGE" --version
 "$FORGE" build
 
 mkdir -p abi bin
 
-# Helper: copy ABI+BIN from Foundry out/ tree into our stable locations
+# Helper: copy ABI+BIN from Foundry out/ tree into stable locations
 copy_artifact () {
-  local contract="$1"          # e.g. QuantumAuthAccount
-  local type_name="$2"         # e.g. QuantumAuthAccount (same as contract unless you use different type)
-  local out_dir="$3"           # e.g. out/QuantumAuthAccount.sol
+  local contract="$1"   # output name (e.g. QuantumAuthAccount)
+  local type_name="$2"  # contract type name in artifact json
+  local out_dir="$3"    # e.g. out/account/QuantumAuthAccount.sol
   local json="$out_dir/$type_name.json"
 
   if [ ! -f "$json" ]; then
     echo "Missing Foundry artifact: $json"
-    echo "Tip: check contract name/type and Foundry output structure."
     exit 1
   fi
 
-  # ABI
-  jq -c '.abi' "$json" > "abi/$contract.abi.json"
+  "$JQ" -c '.abi' "$json" > "abi/$contract.abi.json"
+  "$JQ" -r '.bytecode.object' "$json" > "bin/$contract.bin"
 
-  # Bytecode object (standard-json output)
-  jq -r '.bytecode.object' "$json" > "bin/$contract.bin"
-
-  # Sanity: ensure non-empty
   test -s "abi/$contract.abi.json"
   test -s "bin/$contract.bin"
 }
 
-# You must align these paths with where the contracts actually live in your repo.
-# Adjust the out_dir if your solidity files are in different folders.
-copy_artifact "QuantumAuthAccount" "QuantumAuthAccount" "out/QuantumAuthAccount.sol"
+copy_artifact "QuantumAuthAccount" "QuantumAuthAccount" "out/account/QuantumAuthAccount.sol"
 copy_artifact "TPMVerifierSecp256k1" "TPMVerifierSecp256k1" "out/TPMVerifierSecp256k1.sol"
 copy_artifact "QAERC20" "QAERC20" "out/QAERC20.sol"
-copy_artifact "EntryPoint" "EntryPoint" "out/EntryPoint.sol"
+
+# --- Compile EntryPoint (real contract) with solc in Docker for Go bindings ---
+SOLC_IMAGE="${SOLC_IMAGE:-ghcr.io/argotorg/solc:0.8.28}"
+
+mkdir -p build/solc
+
+docker run --rm \
+  -u "$(id -u)":"$(id -g)" \
+  -v "$ROOT:/workspace" \
+  -w /workspace \
+  "$SOLC_IMAGE" \
+  --base-path . \
+  --include-path lib \
+  --include-path lib/account-abstraction/contracts \
+  --include-path lib/openzeppelin-contracts/contracts \
+  --include-path contracts \
+  --optimize --optimize-runs 200 \
+  --abi --bin \
+  --overwrite \
+  -o build/solc \
+  lib/account-abstraction/contracts/core/EntryPoint.sol
+
+cp -f build/solc/EntryPoint.abi abi/EntryPoint.abi.json
+cp -f build/solc/EntryPoint.bin bin/EntryPoint.bin
+
+test -s abi/EntryPoint.abi.json
+test -s bin/EntryPoint.bin
 
 echo "Artifacts:"
 ls -la abi bin | sed -n '1,200p'
