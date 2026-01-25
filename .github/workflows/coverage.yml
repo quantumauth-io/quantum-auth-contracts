@@ -30,8 +30,7 @@ jobs:
 
       - name: Run coverage (Foundry -> lcov)
         run: |
-          forge coverage --report lcov
-          # Foundry outputs lcov.info in the repo root by default
+          forge coverage --report lcov --ir-minimum
           test -f lcov.info
           lcov --summary lcov.info
 
